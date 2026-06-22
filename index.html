@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>С Днём Рождения, Настя! 🎂</title>
+    
+    <meta property="og:title" content="С Днём Рождения, Настя! 🎂">
+    <meta property="og:description" content="Маленький сюрприз для тебя ✨">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yesnazarov.github.io/for-nasty/">
+    <meta property="og:image" content="https://yesnazarov.github.io/for-nasty/preview.png.jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://yesnazarov.github.io/for-nasty/preview.png.jpeg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0; padding: 0; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background-color: #ffc0cb;
+            background-image: linear-gradient(135deg, #fce1e4 0%, #ffd1ff 100%);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .hearts-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 2; 
+        }
+        .heart {
+            position: absolute; color: rgba(255, 255, 255, 0.9);
+            font-size: 24px; animation: float 5s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            position: relative; 
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            padding: 35px 25px; 
+            border-radius: 60px; 
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+                inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+            width: 85%; max-width: 360px; min-height: 480px; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10; border: none; transition: all 0.3s ease;
+        }
+
+        .cat-emoji { font-size: 70px; margin-bottom: 15px; animation: bounce 2.5s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        h1 { 
+            color: #d63384; font-family: 'Pacifico', cursive; font-size: 22px; 
+            margin-bottom: 20px; line-height: 1.4; min-height: 80px; 
+            text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+            z-index: 20; 
+            position: relative;
+        }
+
+        .button-area {
+            display: flex; justify-content: center; align-items: center;
+            gap: 15px; width: 100%; min-height: 100px; 
+            position: static; 
+            margin-top: 20px;
+        }
+
+        button { 
+            border: none; border-radius: 40px; cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: bold; font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+            color: #d63384;
+        }
+
+        .btn-yes { 
+            background: linear-gradient(135deg, rgba(255, 77, 109, 0.8), rgba(255, 120, 150, 0.8));
+            color: white; padding: 16px 32px; font-size: 18px; z-index: 30; 
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
+            position: relative;
+        }
+
+        .btn-no { 
+            background: rgba(173, 181, 189, 0.5); color: white; 
+            padding: 12px 25px; font-size: 16px; z-index: 25; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            position: relative; 
+        }
+        
+        #success { display: none; color: #d63384; width: 100%; z-index: 50; position: relative;}
+        .irony-text { font-size: 17px; font-weight: 700; margin-bottom: 15px; color: #555; padding: 0 10px; }
+        .warm-text { font-family: 'Pacifico', cursive; font-size: 22px; text-shadow: 0 1px 2px rgba(255,255,255,0.7); margin-top: 10px; line-height: 1.4; }
+        
+        .timer-container {
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #d63384;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+            line-height: 1.5;
+        }
+
+        .shake { animation: shake 0.4s ease; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-bg" id="hearts-bg"></div>
+
+    <div class="container" id="mainCard">
+        <div id="icon" class="cat-emoji">🥳</div>
+        <h1 id="question">Настя, с днём рождения! 🎂 Согласна ли ты дождаться моего приезда, чтобы мы отпраздновали по-настоящему масштабно?</h1>
+        
+        <div class="button-area" id="mainButtons">
+            <button class="btn-yes" id="yesBtn" onclick="sheSaidYes()">Да!</button>
+            <button class="btn-no" id="noBtn" onmousedown="handleNo()" ontouchstart="handleNo()">Нет</button>
+        </div>
+
+        <div id="success">
+            <div class="irony-text">Ура! Ловлю на слове! 😏</div>
+            <div class="warm-text">Жутко скучаю, но скоро приеду и мы это исправим! Готовься к лучшему подарку 🎁</div>
+            <div class="warm-text">С твоим днём! ❤️</div>
+            <div class="timer-container" id="countdownTimer">Считаю дни... ⏳</div>
+        </div>
+    </div>
+
+    <script>
+        const TG_TOKEN = '8542866552:AAE6WKnCwhNI0ZNtmqlYC3LGHxua3piNICU'; 
+        const TG_CHAT_ID = '266004268';
+
+        async function sendToTelegram(message) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message })
+                });
+            } catch (e) { console.error('Ошибка уведомления'); }
+        }
+
+        window.onload = () => {
+            createHearts();
+            sendToTelegram("🚀 Настя открыла поздравительный сайт!");
+        };
+
+        function createHearts() {
+            const bg = document.getElementById('hearts-bg');
+            const emojis = ['🎈', '✨', '🎂', '❤️', '🎁'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                bg.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }, 400);
+        }
+
+        let yesButtonSize = 18;
+        let noCount = 0;
+
+        function handleNo() {
+            noCount++;
+            moveButton();
+            const card = document.getElementById('mainCard');
+            card.classList.remove('shake');
+            void card.offsetWidth;
+            card.classList.add('shake');
+
+            const yesBtn = document.getElementById('yesBtn');
+            if (noCount <= 12) {
+                yesButtonSize += 3; 
+                yesBtn.style.fontSize = yesButtonSize + 'px';
+                yesBtn.style.padding = (16 + noCount * 1.5) + 'px ' + (32 + noCount * 3) + 'px';
+            }
+
+            if (noCount === 2) yesBtn.innerText = "Подумай ещё... 🎁";
+            if (noCount === 3) yesBtn.innerText = "Ждать всё равно придётся! 😂";
+            if (noCount === 5) yesBtn.innerText = "Сдавайся, Настя! 🎉";
+            if (noCount >= 7) yesBtn.innerText = "БЕЗ ВАРИАНТОВ! ЖМИ! 😼";
+        }
+
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const card = document.getElementById('mainCard');
+            const yesBtn = document.getElementById('yesBtn');
+            
+            const cardRect = card.getBoundingClientRect();
+            const yesRect = yesBtn.getBoundingClientRect();
+            
+            const maxX = card.clientWidth - noBtn.offsetWidth - 20; 
+            const maxY = card.clientHeight - noBtn.offsetHeight - 20;
+
+            let x, y, attempts = 0;
+            let isOverlapping = true;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.margin = '0'; 
+
+            while (isOverlapping && attempts < 50) {
+                x = Math.random() * maxX;
+                y = Math.random() * maxY;
+                
+                if (y < 80) {
+                    y += 80; 
+                    if (y > maxY) y = maxY - 10;
+                }
+
+                const noBtnLeft = cardRect.left + x;
+                const noBtnTop = cardRect.top + y;
+                const noBtnRight = noBtnLeft + noBtn.offsetWidth;
+                const noBtnBottom = noBtnTop + noBtn.offsetHeight;
+
+                const hOverlap = noBtnRight > yesRect.left - 10 && noBtnLeft < yesRect.right + 10;
+                const vOverlap = noBtnBottom > yesRect.top - 10 && noBtnTop < yesRect.bottom + 10;
+
+                if (noCount <= 5) { 
+                    if (!(hOverlap && vOverlap)) isOverlapping = false;
+                } else {
+                    isOverlapping = false; 
+                }
+                attempts++;
+            }
+            
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        function startCountdown() {
+            const targetDate = new Date('2026-08-14T00:00:00').getTime();
+            const timerDisplay = document.getElementById('countdownTimer');
+
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const difference = targetDate - now;
+
+                if (difference <= 0) {
+                    clearInterval(interval);
+                    timerDisplay.innerHTML = "Я уже вернулся! ❤️";
+                    return;
+                }
+
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                timerDisplay.innerHTML = `До камбэка осталось:<br>⏱ ${days}д ${hours}ч ${minutes}м ${seconds}с`;
+            }, 1000);
+        }
+
+        function sheSaidYes() {
+            document.getElementById('question').style.display = 'none';
+            document.getElementById('mainButtons').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('icon').innerHTML = '😻';
+
+            sendToTelegram(`✅ НАСТЯ СКАЗАЛА ДА И БУДЕТ ЖДАТЬ!\n\nКнопка "Нет" была нажата: ${noCount} раз.`);
+            startCountdown();
+
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ffffff', '#ffc0cb'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ffffff', '#ffc0cb'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
+    </script>
+</body>
+</html>
