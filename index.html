@@ -132,7 +132,7 @@
 
     <div class="container" id="mainCard">
         <div id="icon" class="cat-emoji">🥳</div>
-        <h1 id="question">Настя, с днём рождения! 🎂 Согласна ли ты дождаться моего приезда, чтобы мы отпраздновали по-настоящему масштабно?</h1>
+        <h1 id="question">Настя, с днём рождения! 🎂 Согласна ли ты дождаться моего приезда, чтобы мы отпраздновали вместе?</h1>
         
         <div class="button-area" id="mainButtons">
             <button class="btn-yes" id="yesBtn" onclick="sheSaidYes()">Да!</button>
@@ -141,7 +141,7 @@
 
         <div id="success">
             <div class="irony-text">Ура! Ловлю на слове! 😏</div>
-            <div class="warm-text">Жутко скучаю, но скоро приеду и мы это исправим! Готовься к лучшему подарку 🎁</div>
+            <div class="warm-text">Жутко скучаю, но скоро приеду и мы это исправим!</div>
             <div class="warm-text">С твоим днём! ❤️</div>
             <div class="timer-container" id="countdownTimer">Считаю дни... ⏳</div>
         </div>
@@ -270,7 +270,7 @@
                 const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-                timerDisplay.innerHTML = `До камбэка осталось:<br>⏱ ${days}д ${hours}ч ${minutes}м ${seconds}с`;
+                timerDisplay.innerHTML = `До моего возвращения осталось:<br>⏱ ${days}д ${hours}ч ${minutes}м ${seconds}с`;
             }, 1000);
         }
 
