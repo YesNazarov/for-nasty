@@ -8,7 +8,6 @@
     <meta property="og:title" content="С Днём Рождения! 🎂">
     <meta property="og:description" content="Доступ к секретному досье ограничен... 🕵️‍♀️">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yesnazarov.github.io/for-nasty/">
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Anonymous+Pro:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -38,17 +37,20 @@
             pointer-events: none; z-index: 1; 
         }
         .bg-item {
-            position: absolute; color: rgba(255, 77, 109, 0.15);
-            font-size: 26px; animation: floatUp 6s linear infinite;
+            position: absolute; 
+            bottom: -60px; /* Всегда начинаем за нижней границей */
+            color: rgba(255, 77, 109, 0.15);
+            font-size: 26px; 
+            animation: floatUp 6s linear infinite;
         }
         @keyframes floatUp {
-            0% { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
             10% { opacity: 1; }
             90% { opacity: 1; }
-            100% { transform: translateY(-15vh) rotate(360deg) scale(1.2); opacity: 0; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
-        /* Главный контейнер (Стили уголовного дела / Секретной папки) */
+        /* Главный контейнер */
         .case-container {
             position: relative;
             background: rgba(25, 26, 35, 0.65);
@@ -62,15 +64,31 @@
                 0 0 30px rgba(255, 77, 109, 0.05);
             width: 90%;
             max-width: 380px;
-            min-height: 480px;
+            min-height: 520px; /* Жесткая фиксация высоты от прыжков */
             display: flex;
+            flex-direction: column;
+            z-index: 10;
+            border: 1px solid rgba(255, 77, 109, 0.15);
+            text-align: center;
+        }
+
+        /* Экраны внутри карточки */
+        .screen {
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 10;
-            border: 1px solid rgba(255, 77, 109, 0.15);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            text-align: center;
+            width: 100%;
+            flex-grow: 1;
+        }
+        .screen.active {
+            display: flex;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         /* Штамп "TOP SECRET" */
@@ -91,6 +109,7 @@
             opacity: 0.85;
             background: #1e1f29;
             pointer-events: none;
+            z-index: 50;
         }
 
         .icon-box { 
@@ -100,23 +119,14 @@
         }
 
         h1 {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 600;
             line-height: 1.5;
             margin-bottom: 25px;
             color: #f3f4f6;
-            min-height: 90px;
         }
 
         /* Стили экрана блокировки / Ввода пароля */
-        #passwordScreen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-        
         .code-title {
             font-family: 'Anonymous Pro', monospace;
             color: #ff4d6d;
@@ -173,16 +183,14 @@
         .btn-unlock:active { transform: scale(0.95); }
 
         /* Экран с делом (Основной вопрос) */
-        #mainQuestionScreen { display: none; width: 100%; }
-
         .button-area {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 15px;
             width: 100%;
-            min-height: 100px;
-            margin-top: 15px;
+            min-height: 80px;
+            margin-top: 10px;
             position: relative;
         }
 
@@ -207,28 +215,19 @@
         }
 
         /* Экран успеха */
-        #successScreen {
-            display: none;
-            width: 100%;
-            animation: fadeIn 0.6s ease forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
         .success-title {
             color: #4ade80;
             font-family: 'Anonymous Pro', monospace;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            line-height: 1.5;
         }
 
         .scrollable-text {
-            max-height: 260px;
+            max-height: 280px;
             overflow-y: auto;
             text-align: left;
             background: rgba(0, 0, 0, 0.2);
@@ -260,29 +259,28 @@
     <div class="case-container" id="mainCard">
         <div class="top-secret-stamp">TOP SECRET</div>
         
-        <div id="passwordScreen">
+        <div class="screen active" id="passwordScreen">
             <div class="icon-box" id="lockIcon">🔒</div>
             <div class="code-title">> СИСТЕМА ЗАБЛОКИРОВАНА</div>
-            <h1 style="min-height: auto; font-size: 16px; margin-bottom: 20px;">Доступ к секретному досье ограничен. Введите кодовое слово, которое вам передали лично на встрече:</h1>
+            <h1 style="font-size: 15px; margin-bottom: 20px;">Доступ к секретному досье ограничен. Введите кодовое слово, которое вам передали лично на встрече:</h1>
             <input type="text" id="passwordInput" class="input-spy" placeholder="Введите секретное слово..." autocomplete="off">
             <button class="btn-unlock" onclick="checkPassword()">ОТКРЫТЬ ДОСЬЕ</button>
         </div>
 
-        <div id="mainQuestionScreen">
+        <div class="screen" id="mainQuestionScreen">
             <div class="icon-box">🕵️‍♀️</div>
-            <h1 id="questionText">Агент Анастасия! Вы обвиняетесь в тотальном похищении мыслей одного детектива. Улики в виде букета и заслуженной медали уже доставлены и на них ваши отпечатки пальцев! Готовы ли вы официально принять это чистосердечное поздравление и пообещать сегодня улыбаться на все 100%? 🥰</h1>
+            <h1 id="questionText">Агент Анастасия! Вы обвиняетесь в тотальном похищении мыслей одного детектива. Улики в виде букета и заслуженной медали уже доставлены, и на них ваши отпечатки пальцев! Готовы ли вы официально принять это чистосердечное поздравление и пообещать сегодня улыбаться на все 100%? 🥰</h1>
             
             <div class="button-area" id="buttonArea">
                 <button class="btn-yes" id="yesBtn" onclick="sheSaidYes()">Да!</button>
-                <button class="btn-no" id="noBtn" onmousedown="handleNo()" ontouchstart="handleNo(event)">Нет</button>
+                <button class="btn-no" id="noBtn" onmousedown="handleNo(event)" ontouchstart="handleNo(event)">Нет</button>
             </div>
         </div>
 
-        <div id="successScreen">
+        <div class="screen" id="successScreen">
             <div class="icon-box">😻</div>
-            <div class="success-title">> ДЕЛО ЗАКРЫТО. УСПЕХ 😏</div>
+            <div class="success-title">> ДЕЛО ЗАКРЫТО.<br>ОПЕРАЦИЯ "ДЕНЬ РОЖДЕНИЯ" ПРОШЛА УСПЕШНО 😏</div>
             <div class="scrollable-text">
-                <strong>Ловлю на слове! Операция "День Рождения" прошла успешно.</strong><br><br>
                 Насть, с твоим днём! 🎂❤️ Безумно жаль, что сегодня я далеко, но мысленно я рядом. Пусть этот букет и маленькая медаль ручной работы напомнят тебе, какая ты крутая, сильная и особенная.<br><br>
                 Желаю тебе самого потрясающего, кайфового отпуска, тотально перезагрузить мозг и набраться невероятных эмоций! Отдыхай, празднуй на полную катушку, а когда вернусь — мы обязательно продолжим нашу дистанцию 😉
             </div>
@@ -290,7 +288,6 @@
     </div>
 
     <script>
-        // === НАСТРОЙКИ ТОКЕНОВ ДЛЯ УВЕДОМЛЕНИЙ В ТЕЛЕГРАМ ===
         const TG_TOKEN = '8967587453:AAGPyPupkQ_BNvmefPFmessWNPBnotXa4ro'; 
         const TG_CHAT_ID = '266004268';
         
@@ -331,8 +328,8 @@
             const password = input.value.trim().toLowerCase();
 
             if (password === SECRET_WORD) {
-                document.getElementById('passwordScreen').style.display = 'none';
-                document.getElementById('mainQuestionScreen').style.display = 'block';
+                document.getElementById('passwordScreen').classList.remove('active');
+                document.getElementById('mainQuestionScreen').classList.add('active');
                 sendToTelegram("🚀 Агент Анастасия успешно ввела кодовое слово и открыла досье!");
             } else {
                 input.classList.add('error');
@@ -354,7 +351,6 @@
         function handleNo(event) {
             if (event) event.preventDefault(); 
             noCount++;
-            moveButton();
             
             const card = document.getElementById('mainCard');
             card.classList.remove('shake');
@@ -362,6 +358,8 @@
             card.classList.add('shake');
 
             const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+
             if (noCount <= 12) {
                 yesButtonSize += 2.5; 
                 yesBtn.style.fontSize = yesButtonSize + 'px';
@@ -371,59 +369,40 @@
             if (noCount === 1) yesBtn.innerText = "Дело уже заведено! 📑";
             if (noCount === 2) yesBtn.innerText = "Следствие не принимает отказов! 😼";
             if (noCount === 3) yesBtn.innerText = "Медаль обжалованию не подлежит! 😂";
-            if (noCount >= 4) yesBtn.innerText = "БЕЗ ВАРИАНТОВ! ЖМИ! ❤️";
-        }
-
-        function moveButton() {
-            const noBtn = document.getElementById('noBtn');
-            const card = document.getElementById('mainCard');
-            const yesBtn = document.getElementById('yesBtn');
             
-            const cardRect = card.getBoundingClientRect();
-            const yesRect = yesBtn.getBoundingClientRect();
-            
-            const maxX = card.clientWidth - noBtn.offsetWidth - 20; 
-            const maxY = card.clientHeight - noBtn.offsetHeight - 20;
-
-            let x, y;
-            let isOverlapping = true;
-            let attempts = 0;
-
-            noBtn.style.position = 'absolute';
-            noBtn.style.margin = '0'; 
-
-            while (isOverlapping && attempts < 50) {
-                x = Math.random() * maxX;
-                y = Math.random() * maxY;
+            // На 4 раз прячем кнопку "Нет" за раздувшуюся кнопку "Да"
+            if (noCount >= 4) {
+                yesBtn.innerText = "БЕЗ ВАРИАНТОВ! ЖМИ! ❤️";
+                noBtn.style.position = 'absolute';
+                noBtn.style.zIndex = '10'; // Прячем за yesBtn (у которого z-index 30)
                 
-                if (y < 100) {
-                    y += 100;
-                    if (y > maxY) y = maxY - 10;
-                }
-
-                const noBtnLeft = cardRect.left + x;
-                const noBtnTop = cardRect.top + y;
-                const noBtnRight = noBtnLeft + noBtn.offsetWidth;
-                const noBtnBottom = noBtnTop + noBtn.offsetHeight;
-
-                const hOverlap = noBtnRight > yesRect.left - 15 && noBtnLeft < yesRect.right + 15;
-                const vOverlap = noBtnBottom > yesRect.top - 15 && noBtnTop < yesRect.bottom + 15;
-
-                if (noCount <= 5) { 
-                    if (!(hOverlap && vOverlap)) isOverlapping = false;
-                } else {
-                    isOverlapping = false; 
-                }
-                attempts++;
+                const yesRect = yesBtn.getBoundingClientRect();
+                const cardRect = card.getBoundingClientRect();
+                
+                noBtn.style.left = (yesRect.left - cardRect.left + (yesRect.width - noBtn.offsetWidth) / 2) + 'px';
+                noBtn.style.top = (yesRect.top - cardRect.top + (yesRect.height - noBtn.offsetHeight) / 2) + 'px';
+                return;
             }
+
+            // Рандомное перемещение в пределах карточки для первых 3 раз
+            noBtn.style.position = 'absolute';
+            noBtn.style.zIndex = '25';
+            
+            const minX = 15;
+            const maxX = card.offsetWidth - noBtn.offsetWidth - 15;
+            const minY = 100; // Чтобы не залетала на иконку и верхний текст
+            const maxY = card.offsetHeight - noBtn.offsetHeight - 20;
+
+            let x = Math.random() * (maxX - minX) + minX;
+            let y = Math.random() * (maxY - minY) + minY;
             
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
         }
 
         function sheSaidYes() {
-            document.getElementById('mainQuestionScreen').style.display = 'none';
-            document.getElementById('successScreen').style.display = 'block';
+            document.getElementById('mainQuestionScreen').classList.remove('active');
+            document.getElementById('successScreen').classList.add('active');
 
             sendToTelegram(`✅ АГЕНТ АНАСТАСИЯ ПРИНЯЛА ПОЗДРАВЛЕНИЕ И УЛЫБАЕТСЯ!\n\nКнопка "Нет" была нажата: ${noCount} раз.`);
 
