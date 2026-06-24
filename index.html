@@ -19,27 +19,22 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Жесткий фикс для iOS Safari */
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
-
         body {
+            /* Фикс для iOS Safari, чтобы контент не перекрывался адресной строкой */
+            min-height: 100vh;
+            min-height: 100dvh; 
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #1e1f29; /* Запасной цвет */
             background: radial-gradient(circle at center, #1e1f29 0%, #0f1015 100%);
             font-family: 'Montserrat', sans-serif;
-            color: #f3f4f6;
-            position: relative;
             overflow: hidden;
+            color: #f3f4f6;
         }
 
         /* Элементы заднего фона */
         .spy-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1; 
         }
         .bg-item {
@@ -59,9 +54,12 @@
         /* Главный контейнер */
         .case-container {
             position: relative;
-            background: rgba(25, 26, 35, 0.85); /* Более плотный фон для надежности */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(25, 26, 35, 0.65);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            /* Аппаратное ускорение для iOS, чтобы блок не исчезал */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
             padding: 40px 25px;
             border-radius: 32px;
             box-shadow: 
@@ -93,7 +91,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
 
@@ -112,6 +110,7 @@
             border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            opacity: 0.85;
             background: #1e1f29;
             pointer-events: none;
             z-index: 50;
@@ -187,7 +186,7 @@
         }
         .btn-unlock:active { transform: scale(0.95); }
 
-        /* Экран с делом (Основной вопрос) */
+        /* Область кнопок (Убрали relative, чтобы кнопки позиционировались от всей карточки) */
         .button-area {
             display: flex;
             justify-content: center;
@@ -196,7 +195,6 @@
             width: 100%;
             min-height: 80px;
             margin-top: 10px;
-            position: relative;
         }
 
         .btn-yes {
@@ -268,7 +266,7 @@
             <div class="code-title">> СИСТЕМА ЗАБЛОКИРОВАНА</div>
             <h1 style="font-size: 15px; margin-bottom: 20px;">Доступ к секретному досье ограничен. Введите кодовое слово, которое вам передали лично на встрече:</h1>
             <input type="text" id="passwordInput" class="input-spy" placeholder="Введите секретное слово..." autocomplete="off">
-            <button class="btn-unlock" id="unlockBtn">ОТКРЫТЬ ДОСЬЕ</button>
+            <button class="btn-unlock" onclick="checkPassword()">ОТКРЫТЬ ДОСЬЕ</button>
         </div>
 
         <div class="screen" id="mainQuestionScreen">
@@ -276,8 +274,8 @@
             <h1 id="questionText">Агент Анастасия! Вы обвиняетесь в тотальном похищении мыслей одного детектива. Улики в виде букета и заслуженной медали уже доставлены, и на них ваши отпечатки пальцев! Готовы ли вы официально принять это чистосердечное поздравление и пообещать сегодня улыбаться на все 100%? 🥰</h1>
             
             <div class="button-area" id="buttonArea">
-                <button class="btn-yes" id="yesBtn">Да!</button>
-                <button class="btn-no" id="noBtn">Нет</button>
+                <button class="btn-yes" id="yesBtn" onclick="sheSaidYes()">Да!</button>
+                <button class="btn-no" id="noBtn" onmousedown="handleNo(event)" ontouchstart="handleNo(event)">Нет</button>
             </div>
         </div>
 
@@ -291,7 +289,8 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js" defer></script>
+    
     <script>
         const TG_TOKEN = '8967587453:AAGPyPupkQ_BNvmefPFmessWNPBnotXa4ro'; 
         const TG_CHAT_ID = '266004268';
@@ -309,22 +308,9 @@
             } catch (e) { console.error('Ошибка логирования'); }
         }
 
-        // Запуск логики сразу после построения интерфейса
-        document.addEventListener('DOMContentLoaded', () => {
+        window.onload = () => {
             createBackgroundElements();
-
-            // Привязка кнопок (убрали onclick из HTML для большей надежности на iOS)
-            document.getElementById('unlockBtn').addEventListener('click', checkPassword);
-            document.getElementById('yesBtn').addEventListener('click', sheSaidYes);
-            
-            const noBtn = document.getElementById('noBtn');
-            noBtn.addEventListener('mousedown', handleNo);
-            noBtn.addEventListener('touchstart', handleNo);
-
-            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') checkPassword();
-            });
-        });
+        };
 
         function createBackgroundElements() {
             const bg = document.getElementById('spyBg');
@@ -358,6 +344,10 @@
                 }, 500);
             }
         }
+
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
 
         let yesButtonSize = 18;
         let noCount = 0;
@@ -422,8 +412,7 @@
             const end = Date.now() + duration;
             
             (function frame() {
-                // Если confetti не загрузился (слабый интернет), анимация просто пропустится без ошибки
-                if (typeof confetti === 'function') {
+                if (typeof confetti !== 'undefined') {
                     confetti({
                         particleCount: 4,
                         angle: 60,
