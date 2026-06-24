@@ -3,123 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>С Днём Рождения, Настя! 🎂</title>
+    <title>Детективное Досье ✨</title>
     
-    <meta property="og:title" content="С Днём Рождения, Настя! 🎂">
-    <meta property="og:description" content="Маленький сюрприз для тебя ✨">
+    <meta property="og:title" content="С Днём Рождения! 🎂">
+    <meta property="og:description" content="Доступ к секретному досье ограничен... 🕵️‍♀️">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yesnazarov.github.io/for-nasty/">
-    <meta property="og:image" content="https://yesnazarov.github.io/for-nasty/preview.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://yesnazarov.github.io/for-nasty/preview.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Anonymous+Pro:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            margin: 0; padding: 0; height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            background-color: #ffc0cb;
-            background-image: linear-gradient(135deg, #fce1e4 0%, #ffd1ff 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1e1f29 0%, #0f1015 100%);
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
-            touch-action: manipulation;
+            color: #f3f4f6;
         }
 
-        .hearts-bg {
+        /* Элементы заднего фона */
+        .spy-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 2; 
+            pointer-events: none; z-index: 1; 
         }
-        .heart {
-            position: absolute; color: rgba(255, 255, 255, 0.9);
-            font-size: 24px; animation: float 5s linear infinite;
+        .bg-item {
+            position: absolute; color: rgba(255, 77, 109, 0.15);
+            font-size: 26px; animation: floatUp 6s linear infinite;
         }
-        @keyframes float {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
-        }
-
-        .container {
-            position: relative; 
-            text-align: center;
-            background: rgba(255, 255, 255, 0.2); 
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            padding: 35px 25px; 
-            border-radius: 60px; 
-            box-shadow: 
-                0 10px 40px rgba(0, 0, 0, 0.1),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.3),
-                inset 0 0 0 2px rgba(255, 255, 255, 0.05);
-            width: 85%; max-width: 360px; min-height: 480px; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10; border: none; transition: all 0.3s ease;
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-15vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
-        .cat-emoji { font-size: 70px; margin-bottom: 15px; animation: bounce 2.5s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        h1 { 
-            color: #d63384; font-family: 'Pacifico', cursive; font-size: 22px; 
-            margin-bottom: 20px; line-height: 1.4; min-height: 80px; 
-            text-shadow: 0 1px 2px rgba(255,255,255,0.7);
-            z-index: 20; 
+        /* Главный контейнер (Стили уголовного дела / Секретной папки) */
+        .case-container {
             position: relative;
+            background: rgba(25, 26, 35, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 40px 25px;
+            border-radius: 32px;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+                0 0 30px rgba(255, 77, 109, 0.05);
+            width: 90%;
+            max-width: 380px;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border: 1px solid rgba(255, 77, 109, 0.15);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
         }
+
+        /* Штамп "TOP SECRET" */
+        .top-secret-stamp {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            border: 3px dashed #ff4d6d;
+            color: #ff4d6d;
+            font-family: 'Anonymous Pro', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 4px 10px;
+            transform: rotate(12deg);
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.85;
+            background: #1e1f29;
+            pointer-events: none;
+        }
+
+        .icon-box { 
+            font-size: 65px; 
+            margin-bottom: 20px; 
+            filter: drop-shadow(0 0 10px rgba(255,77,109,0.3));
+        }
+
+        h1 {
+            font-size: 19px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            color: #f3f4f6;
+            min-height: 90px;
+        }
+
+        /* Стили экрана блокировки / Ввода пароля */
+        #passwordScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .code-title {
+            font-family: 'Anonymous Pro', monospace;
+            color: #ff4d6d;
+            font-size: 15px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .input-spy {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 15px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 20px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .input-spy:focus {
+            border-color: #ff4d6d;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.2);
+        }
+        .input-spy.error {
+            border-color: #ef4444;
+            animation: inputShake 0.4s ease;
+        }
+        @keyframes inputShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Общие стили кнопок */
+        button {
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-unlock {
+            background: linear-gradient(135deg, #ff4d6d 0%, #ff758c 100%);
+            color: white;
+            padding: 14px 35px;
+            font-size: 15px;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+        .btn-unlock:active { transform: scale(0.95); }
+
+        /* Экран с делом (Основной вопрос) */
+        #mainQuestionScreen { display: none; width: 100%; }
 
         .button-area {
-            display: flex; justify-content: center; align-items: center;
-            gap: 15px; width: 100%; min-height: 100px; 
-            position: static; 
-            margin-top: 20px;
-        }
-
-        button { 
-            border: none; border-radius: 40px; cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-weight: bold; font-family: 'Montserrat', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-            color: #d63384;
-        }
-
-        .btn-yes { 
-            background: linear-gradient(135deg, rgba(255, 77, 109, 0.8), rgba(255, 120, 150, 0.8));
-            color: white; padding: 16px 32px; font-size: 18px; z-index: 30; 
-            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            min-height: 100px;
+            margin-top: 15px;
             position: relative;
         }
 
-        .btn-no { 
-            background: rgba(173, 181, 189, 0.5); color: white; 
-            padding: 12px 25px; font-size: 16px; z-index: 25; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            position: relative; 
-        }
-        
-        #success { display: none; color: #d63384; width: 100%; z-index: 50; position: relative;}
-        .irony-text { font-size: 17px; font-weight: 700; margin-bottom: 15px; color: #555; padding: 0 10px; }
-        .warm-text { font-family: 'Pacifico', cursive; font-size: 22px; text-shadow: 0 1px 2px rgba(255,255,255,0.7); margin-top: 10px; line-height: 1.4; }
-        
-        .timer-container {
-            margin-top: 20px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #d63384;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
-            line-height: 1.5;
+        .btn-yes {
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+            color: white;
+            padding: 16px 36px;
+            font-size: 18px;
+            z-index: 30;
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+            position: relative;
         }
 
-        .shake { animation: shake 0.4s ease; }
-        @keyframes shake {
+        .btn-no {
+            background: rgba(243, 244, 246, 0.1);
+            border: 1px solid rgba(243, 244, 246, 0.2);
+            color: #d1d5db;
+            padding: 12px 24px;
+            font-size: 15px;
+            z-index: 25;
+            position: relative;
+        }
+
+        /* Экран успеха */
+        #successScreen {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.6s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .success-title {
+            color: #4ade80;
+            font-family: 'Anonymous Pro', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scrollable-text {
+            max-height: 260px;
+            overflow-y: auto;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e5e7eb;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Стилизация скроллбара */
+        .scrollable-text::-webkit-scrollbar { width: 4px; }
+        .scrollable-text::-webkit-scrollbar-track { background: transparent; }
+        .scrollable-text::-webkit-scrollbar-thumb { background: rgba(255, 77, 109, 0.3); border-radius: 10px; }
+
+        .shake { animation: cardShake 0.4s ease; }
+        @keyframes cardShake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-6px); }
             75% { transform: translateX(6px); }
@@ -128,28 +255,47 @@
 </head>
 <body>
 
-    <div class="hearts-bg" id="hearts-bg"></div>
+    <div class="spy-bg" id="spyBg"></div>
 
-    <div class="container" id="mainCard">
-        <div id="icon" class="cat-emoji">🥳</div>
-        <h1 id="question">Настя, с днём рождения! 🎂 Согласна ли ты дождаться моего приезда, чтобы мы отпраздновали вместе?</h1>
+    <div class="case-container" id="mainCard">
+        <div class="top-secret-stamp">TOP SECRET</div>
         
-        <div class="button-area" id="mainButtons">
-            <button class="btn-yes" id="yesBtn" onclick="sheSaidYes()">Да!</button>
-            <button class="btn-no" id="noBtn" onmousedown="handleNo()" ontouchstart="handleNo()">Нет</button>
+        <div id="passwordScreen">
+            <div class="icon-box" id="lockIcon">🔒</div>
+            <div class="code-title">> СИСТЕМА ЗАБЛОКИРОВАНА</div>
+            <h1 style="min-height: auto; font-size: 16px; margin-bottom: 20px;">Доступ к секретному досье ограничен. Введите кодовое слово, которое вам передали лично на встрече:</h1>
+            <input type="text" id="passwordInput" class="input-spy" placeholder="Введите секретное слово..." autocomplete="off">
+            <button class="btn-unlock" onclick="checkPassword()">ОТКРЫТЬ ДОСЬЕ</button>
         </div>
 
-        <div id="success">
-            <div class="irony-text">Ура! Ловлю на слове! 😏</div>
-            <div class="warm-text">Жутко скучаю, но скоро приеду и мы это исправим!</div>
-            <div class="warm-text">С твоим днём! ❤️</div>
-            <div class="timer-container" id="countdownTimer">Считаю дни... ⏳</div>
+        <div id="mainQuestionScreen">
+            <div class="icon-box">🕵️‍♀️</div>
+            <h1 id="questionText">Агент Анастасия! Вы обвиняетесь в тотальном похищении мыслей одного детектива. Улики в виде букета и заслуженной медали уже доставлены и на них ваши отпечатки пальцев! Готовы ли вы официально принять это чистосердечное поздравление и пообещать сегодня улыбаться на все 100%? 🥰</h1>
+            
+            <div class="button-area" id="buttonArea">
+                <button class="btn-yes" id="yesBtn" onclick="sheSaidYes()">Да!</button>
+                <button class="btn-no" id="noBtn" onmousedown="handleNo()" ontouchstart="handleNo(event)">Нет</button>
+            </div>
+        </div>
+
+        <div id="successScreen">
+            <div class="icon-box">😻</div>
+            <div class="success-title">> ДЕЛО ЗАКРЫТО. УСПЕХ 😏</div>
+            <div class="scrollable-text">
+                <strong>Ловлю на слове! Операция "День Рождения" прошла успешно.</strong><br><br>
+                Насть, с твоим днём! 🎂❤️ Безумно жаль, что сегодня я далеко, но мысленно я рядом. Пусть этот букет и маленькая медаль ручной работы напомнят тебе, какая ты крутая, сильная и особенная.<br><br>
+                Желаю тебе самого потрясающего, кайфового отпуска, тотально перезагрузить мозг и набраться невероятных эмоций! Отдыхай, празднуй на полную катушку, а когда вернусь — мы обязательно продолжим нашу дистанцию 😉
+            </div>
         </div>
     </div>
 
     <script>
+        // === НАСТРОЙКИ ТОКЕНОВ ДЛЯ УВЕДОМЛЕНИЙ В ТЕЛЕГРАМ ===
         const TG_TOKEN = '8967587453:AAGPyPupkQ_BNvmefPFmessWNPBnotXa4ro'; 
         const TG_CHAT_ID = '266004268';
+        
+        // === ТВОЕ КОДОВОЕ СЛОВО (В нижнем регистре) ===
+        const SECRET_WORD = 'комната'; 
 
         async function sendToTelegram(message) {
             try {
@@ -158,51 +304,74 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message })
                 });
-            } catch (e) { console.error('Ошибка уведомления'); }
+            } catch (e) { console.error('Ошибка логирования'); }
         }
 
         window.onload = () => {
-            createHearts();
-            sendToTelegram("🚀 Настя открыла поздравительный сайт!");
+            createBackgroundElements();
         };
 
-        function createHearts() {
-            const bg = document.getElementById('hearts-bg');
-            const emojis = ['🎈', '✨', '🎂', '❤️', '🎁'];
+        function createBackgroundElements() {
+            const bg = document.getElementById('spyBg');
+            const items = ['🔍', '🕵️‍♀️', '❤️', '✨', '🎂', '🎖️', '📑'];
             
             setInterval(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                bg.appendChild(heart);
-                setTimeout(() => heart.remove(), 5000);
-            }, 400);
+                const item = document.createElement('div');
+                item.classList.add('bg-item');
+                item.innerHTML = items[Math.floor(Math.random() * items.length)];
+                item.style.left = Math.random() * 100 + 'vw';
+                item.style.animationDuration = (Math.random() * 2 + 4) + 's';
+                bg.appendChild(item);
+                setTimeout(() => item.remove(), 6000);
+            }, 500);
         }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const password = input.value.trim().toLowerCase();
+
+            if (password === SECRET_WORD) {
+                document.getElementById('passwordScreen').style.display = 'none';
+                document.getElementById('mainQuestionScreen').style.display = 'block';
+                sendToTelegram("🚀 Агент Анастасия успешно ввела кодовое слово и открыла досье!");
+            } else {
+                input.classList.add('error');
+                document.getElementById('lockIcon').innerHTML = '🚨';
+                setTimeout(() => {
+                    input.classList.remove('error');
+                    document.getElementById('lockIcon').innerHTML = '🔒';
+                }, 500);
+            }
+        }
+
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
 
         let yesButtonSize = 18;
         let noCount = 0;
 
-        function handleNo() {
+        function handleNo(event) {
+            if (event) event.preventDefault(); 
             noCount++;
             moveButton();
+            
             const card = document.getElementById('mainCard');
             card.classList.remove('shake');
-            void card.offsetWidth;
+            void card.offsetWidth; 
             card.classList.add('shake');
 
             const yesBtn = document.getElementById('yesBtn');
             if (noCount <= 12) {
-                yesButtonSize += 3; 
+                yesButtonSize += 2.5; 
                 yesBtn.style.fontSize = yesButtonSize + 'px';
-                yesBtn.style.padding = (16 + noCount * 1.5) + 'px ' + (32 + noCount * 3) + 'px';
+                yesBtn.style.padding = (16 + noCount * 1.5) + 'px ' + (36 + noCount * 3) + 'px';
             }
 
-            if (noCount === 2) yesBtn.innerText = "Подумай ещё... 🎁";
-            if (noCount === 3) yesBtn.innerText = "Ждать всё равно придётся! 😂";
-            if (noCount === 5) yesBtn.innerText = "Сдавайся, Настя! 🎉";
-            if (noCount >= 7) yesBtn.innerText = "БЕЗ ВАРИАНТОВ! ЖМИ! 😼";
+            if (noCount === 1) yesBtn.innerText = "Дело уже заведено! 📑";
+            if (noCount === 2) yesBtn.innerText = "Следствие не принимает отказов! 😼";
+            if (noCount === 3) yesBtn.innerText = "Медаль обжалованию не подлежит! 😂";
+            if (noCount >= 4) yesBtn.innerText = "БЕЗ ВАРИАНТОВ! ЖМИ! ❤️";
         }
 
         function moveButton() {
@@ -216,8 +385,9 @@
             const maxX = card.clientWidth - noBtn.offsetWidth - 20; 
             const maxY = card.clientHeight - noBtn.offsetHeight - 20;
 
-            let x, y, attempts = 0;
+            let x, y;
             let isOverlapping = true;
+            let attempts = 0;
 
             noBtn.style.position = 'absolute';
             noBtn.style.margin = '0'; 
@@ -226,8 +396,8 @@
                 x = Math.random() * maxX;
                 y = Math.random() * maxY;
                 
-                if (y < 80) {
-                    y += 80; 
+                if (y < 100) {
+                    y += 100;
                     if (y > maxY) y = maxY - 10;
                 }
 
@@ -236,8 +406,8 @@
                 const noBtnRight = noBtnLeft + noBtn.offsetWidth;
                 const noBtnBottom = noBtnTop + noBtn.offsetHeight;
 
-                const hOverlap = noBtnRight > yesRect.left - 10 && noBtnLeft < yesRect.right + 10;
-                const vOverlap = noBtnBottom > yesRect.top - 10 && noBtnTop < yesRect.bottom + 10;
+                const hOverlap = noBtnRight > yesRect.left - 15 && noBtnLeft < yesRect.right + 15;
+                const vOverlap = noBtnBottom > yesRect.top - 15 && noBtnTop < yesRect.bottom + 15;
 
                 if (noCount <= 5) { 
                     if (!(hOverlap && vOverlap)) isOverlapping = false;
@@ -251,44 +421,34 @@
             noBtn.style.top = y + 'px';
         }
 
-        function startCountdown() {
-            const targetDate = new Date('2026-08-14T00:00:00').getTime();
-            const timerDisplay = document.getElementById('countdownTimer');
-
-            const interval = setInterval(() => {
-                const now = new Date().getTime();
-                const difference = targetDate - now;
-
-                if (difference <= 0) {
-                    clearInterval(interval);
-                    timerDisplay.innerHTML = "Я уже вернулся! ❤️";
-                    return;
-                }
-
-                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-                timerDisplay.innerHTML = `До моего возвращения осталось:<br>⏱ ${days}д ${hours}ч ${minutes}м ${seconds}с`;
-            }, 1000);
-        }
-
         function sheSaidYes() {
-            document.getElementById('question').style.display = 'none';
-            document.getElementById('mainButtons').style.display = 'none';
-            document.getElementById('success').style.display = 'block';
-            document.getElementById('icon').innerHTML = '😻';
+            document.getElementById('mainQuestionScreen').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'block';
 
-            sendToTelegram(`✅ НАСТЯ СКАЗАЛА ДА И БУДЕТ ЖДАТЬ!\n\nКнопка "Нет" была нажата: ${noCount} раз.`);
-            startCountdown();
+            sendToTelegram(`✅ АГЕНТ АНАСТАСИЯ ПРИНЯЛА ПОЗДРАВЛЕНИЕ И УЛЫБАЕТСЯ!\n\nКнопка "Нет" была нажата: ${noCount} раз.`);
 
-            const duration = 3 * 1000;
+            const duration = 4 * 1000;
             const end = Date.now() + duration;
+            
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d6d', '#ffffff', '#ffc0cb'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d6d', '#ffffff', '#ffc0cb'] });
-                if (Date.now() < end) { requestAnimationFrame(frame); }
+                confetti({
+                    particleCount: 4,
+                    angle: 60,
+                    spread: 60,
+                    origin: { x: 0, y: 0.8 },
+                    colors: ['#ff4d6d', '#ffffff', '#ff758c', '#4ade80']
+                });
+                confetti({
+                    particleCount: 4,
+                    angle: 120,
+                    spread: 60,
+                    origin: { x: 1, y: 0.8 },
+                    colors: ['#ff4d6d', '#ffffff', '#ff758c', '#4ade80']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
             }());
         }
     </script>
