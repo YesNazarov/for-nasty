@@ -7,6 +7,7 @@
     
     <meta property="og:title" content="С Днём Рождения! 🎂">
     <meta property="og:description" content="Доступ к секретному досье ограничен... 🕵️‍♀️">
+    <meta property="og:image" content="https://YesNazarov.github.io/for-nasty/preview.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     
@@ -284,8 +285,7 @@
             <div class="success-title">> ДЕЛО ЗАКРЫТО.<br>ОПЕРАЦИЯ "ДЕНЬ РОЖДЕНИЯ" ПРОШЛА УСПЕШНО 😏</div>
             <div class="scrollable-text">
                 Насть, с твоим днём! 🎂❤️ Безумно жаль, что сегодня я далеко, но мысленно я рядом. Пусть этот букет и маленькая медаль ручной работы напомнят тебе, какая ты крутая, сильная и особенная.<br><br>
-                Желаю тебе самого потрясающего, кайфового отпуска, тотально перезагрузить мозг и набраться невероятных эмоций! Отдыхай, празднуй на полную катушку, а когда вернусь — мы обязательно продолжим с того самого классного момента, на котором остановились 🤗
-
+                Желаю тебе самого потрясающего, кайфового отпуска, тотально перезагрузить мозг и набраться невероятных эмоций! Отдыхай, празднуй на полную катушку, а когда я вернусь — мы обязательно продолжим с того самого классного момента, на котором остановились 🤗
             </div>
         </div>
     </div>
@@ -296,7 +296,6 @@
         const TG_TOKEN = '8625329112:AAHNPKU0RF2P6vcjoY_M159GHXk6eHTZsxU'; 
         const TG_CHAT_ID = '266004268';
         
-        // Массив допустимых вариантов кодового слова в нижнем регистре для гибкой проверки
         const VALID_PASSWORDS = [
             'анастасия (не)фсб',
             'анастасия нефсб',
@@ -317,7 +316,6 @@
 
         window.onload = () => {
             createBackgroundElements();
-            // Отправка уведомления об открытии ссылки
             sendToTelegram("👀 Ссылка на досье была успешно открыта! Агент Анастасия зашла на сайт.");
         };
 
@@ -343,12 +341,10 @@
             if (VALID_PASSWORDS.includes(enteredPassword)) {
                 document.getElementById('passwordScreen').classList.remove('active');
                 document.getElementById('mainQuestionScreen').classList.add('active');
-                // Уведомление о правильном вводе
                 sendToTelegram("🚀 Кодовое слово введено ВЕРНО! Досье открыто.");
             } else {
                 input.classList.add('error');
                 document.getElementById('lockIcon').innerHTML = '🚨';
-                // Уведомление о неправильном вводе с логированием того, что именно ввели
                 sendToTelegram(`❌ Попытка ввода пароля! Введено НЕВЕРНО: "${input.value}"`);
                 setTimeout(() => {
                     input.classList.remove('error');
@@ -424,7 +420,6 @@
             document.getElementById('mainQuestionScreen').classList.remove('active');
             document.getElementById('successScreen').classList.add('active');
 
-            // Уведомление о финальном успехе и количестве нажатий «Нет»
             sendToTelegram(`✅ АГЕНТ АНАСТАСИЯ ПРИНЯЛА ПОЗДРАВЛЕНИЕ И УЛЫБАЕТСЯ!\n\nКнопка "Нет" была нажата перед этим: ${noCount} раз.`);
 
             const duration = 4 * 1000;
