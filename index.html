@@ -25,7 +25,6 @@
             justify-content: center;
             align-items: center;
             background: radial-gradient(circle at center, #1e1f29 0%, #0f1015 100%);
-            /* Основной шрифт теперь печатный, как в досье */
             font-family: 'Courier Prime', Courier, monospace;
             overflow: hidden;
             color: #f3f4f6;
@@ -57,7 +56,7 @@
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
             padding: 40px 25px;
-            border-radius: 20px; /* Немного острее углы, как у папки с делом */
+            border-radius: 20px; 
             box-shadow: 
                 0 20px 50px rgba(0, 0, 0, 0.5),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.08),
@@ -131,6 +130,15 @@
             letter-spacing: 1px;
         }
 
+        .hint-text {
+            display: block;
+            margin-top: 15px;
+            color: #ff4d6d;
+            font-size: 13px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
         .input-spy {
             width: 100%;
             background: rgba(0, 0, 0, 0.4);
@@ -160,7 +168,6 @@
             75% { transform: translateX(8px); }
         }
 
-        /* Кнопки оставляем современными (Montserrat) для читаемости и стиля */
         button {
             border: none;
             border-radius: 16px;
@@ -254,7 +261,10 @@
         <div class="screen active" id="passwordScreen">
             <div class="icon-box" id="lockIcon">🔒</div>
             <div class="code-title">> СИСТЕМА ЗАБЛОКИРОВАНА</div>
-            <h1 style="font-size: 15px; margin-bottom: 20px;">Доступ к секретному досье ограничен.<br>Введите кодовое слово, переданное вам лично:</h1>
+            <h1 style="font-size: 15px; margin-bottom: 20px;">
+                Доступ к секретному досье ограничен.<br>Введите кодовое слово, переданное вам лично:
+                <span class="hint-text">Подсказка: То, как ты записана у меня в контактах (вспоминай наш первый прикол) 🤭</span>
+            </h1>
             <input type="text" id="passwordInput" class="input-spy" placeholder="СЕКРЕТНОЕ СЛОВО" autocomplete="off">
             <button class="btn-unlock" onclick="checkPassword()">ОТКРЫТЬ ДОСЬЕ</button>
         </div>
@@ -282,11 +292,17 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js" defer></script>
     
     <script>
-        const TG_TOKEN = '8967587453:AAGPyPupkQ_BNvmefPFmessWNPBnotXa4ro'; 
+        const TG_TOKEN = '8625329112:AAHNPKU0RF2P6vcjoY_M159GHXk6eHTZsxU'; 
         const TG_CHAT_ID = '266004268';
         
-        // === ТВОЕ КОДОВОЕ СЛОВО (В нижнем регистре) ===
-        const SECRET_WORD = 'комната'; 
+        // Массив допустимых вариантов кодового слова в нижнем регистре для гибкой проверки
+        const VALID_PASSWORDS = [
+            'анастасия (не)фсб',
+            'анастасия нефсб',
+            'анастасия не фсб',
+            'нефсб',
+            'не фсб'
+        ]; 
 
         async function sendToTelegram(message) {
             try {
@@ -300,6 +316,8 @@
 
         window.onload = () => {
             createBackgroundElements();
+            // Отправка уведомления об открытии ссылки
+            sendToTelegram("👀 Ссылка на досье была успешно открыта! Агент Анастасия зашла на сайт.");
         };
 
         function createBackgroundElements() {
@@ -319,15 +337,18 @@
 
         function checkPassword() {
             const input = document.getElementById('passwordInput');
-            const password = input.value.trim().toLowerCase();
+            const enteredPassword = input.value.trim().toLowerCase();
 
-            if (password === SECRET_WORD) {
+            if (VALID_PASSWORDS.includes(enteredPassword)) {
                 document.getElementById('passwordScreen').classList.remove('active');
                 document.getElementById('mainQuestionScreen').classList.add('active');
-                sendToTelegram("🚀 Агент Анастасия успешно ввела кодовое слово и открыла досье!");
+                // Уведомление о правильном вводе
+                sendToTelegram("🚀 Кодовое слово введено ВЕРНО! Досье открыто.");
             } else {
                 input.classList.add('error');
                 document.getElementById('lockIcon').innerHTML = '🚨';
+                // Уведомление о неправильном вводе с логированием того, что именно ввели
+                sendToTelegram(`❌ Попытка ввода пароля! Введено НЕВЕРНО: "${input.value}"`);
                 setTimeout(() => {
                     input.classList.remove('error');
                     document.getElementById('lockIcon').innerHTML = '🔒';
@@ -341,12 +362,11 @@
 
         let yesButtonSize = 18;
         let noCount = 0;
-        let lastMoveTime = 0; // Предохранитель от двойных тапов на смартфонах
+        let lastMoveTime = 0; 
 
         function handleNo(event) {
             if (event) event.preventDefault(); 
             
-            // Фикс бага с двойным срабатыванием (Touch + Click)
             const now = Date.now();
             if (now - lastMoveTime < 300) return; 
             lastMoveTime = now;
@@ -403,7 +423,8 @@
             document.getElementById('mainQuestionScreen').classList.remove('active');
             document.getElementById('successScreen').classList.add('active');
 
-            sendToTelegram(`✅ АГЕНТ АНАСТАСИЯ ПРИНЯЛА ПОЗДРАВЛЕНИЕ И УЛЫБАЕТСЯ!\n\nКнопка "Нет" была нажата: ${noCount} раз.`);
+            // Уведомление о финальном успехе и количестве нажатий «Нет»
+            sendToTelegram(`✅ АГЕНТ АНАСТАСИЯ ПРИНЯЛА ПОЗДРАВЛЕНИЕ И УЛЫБАЕТСЯ!\n\nКнопка "Нет" была нажата перед этим: ${noCount} раз.`);
 
             const duration = 4 * 1000;
             const end = Date.now() + duration;
