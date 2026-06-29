@@ -6,7 +6,7 @@
     <title>Детективное Досье ✨</title>
     
     <meta property="og:title" content="С Днём Рождения! 🎂">
-    <meta property="og:description" content="Доступ к секретному досье ограничен... 🕵️‍♀️">
+    <meta property="og:description" content="Доступ к секретного досье ограничен... 🕵️‍♀️">
     <meta property="og:image" content="https://YesNazarov.github.io/for-nasty/preview.png">
     <meta property="og:type" content="website">
     
@@ -70,7 +70,7 @@
                 0 0 30px rgba(255, 77, 109, 0.05);
             width: 90%;
             max-width: 380px;
-            min-height: 540px; 
+            min-height: 560px; 
             display: flex;
             flex-direction: column;
             z-index: 10;
@@ -232,12 +232,38 @@
             line-height: 1.5;
         }
 
+        /* Обёртка с эффектом затухания текста внизу */
+        .scroll-container-wrapper {
+            position: relative;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .scroll-container-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 2px;
+            right: 2px;
+            height: 50px;
+            background: linear-gradient(to top, rgba(20, 21, 28, 0.98) 0%, rgba(20, 21, 28, 0) 100%);
+            pointer-events: none;
+            border-radius: 0 0 12px 12px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Состояние при полной прокрутке вниз (скрываем затухание) */
+        .scroll-container-wrapper.at-bottom::after {
+            opacity: 0;
+        }
+
         .scrollable-text {
-            max-height: 300px;
-            overflow-y: auto;
+            max-height: 310px; /* Увеличили поле для чтения */
+            overflow-y: scroll; /* Принудительный скроллбар */
             text-align: left;
             background: rgba(0, 0, 0, 0.3);
             padding: 20px;
+            padding-bottom: 45px; /* Запас под затухание */
             border-radius: 12px;
             font-size: 15px;
             line-height: 1.7;
@@ -246,8 +272,9 @@
             font-family: 'Courier Prime', Courier, monospace;
         }
         
-        .scrollable-text::-webkit-scrollbar { width: 4px; }
-        .scrollable-text::-webkit-scrollbar-track { background: transparent; }
+        /* Скроллбар, который всегда аккуратно виден */
+        .scrollable-text::-webkit-scrollbar { width: 5px; }
+        .scrollable-text::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
         .scrollable-text::-webkit-scrollbar-thumb { background: rgba(255, 77, 109, 0.4); border-radius: 10px; }
 
         .shake { animation: cardShake 0.4s ease; }
@@ -289,14 +316,17 @@
         <div class="screen" id="successScreen">
             <div class="icon-box">😻</div>
             <div class="success-title">> Таможенный контроль личных границ пройден успешно!<br> >> ОПЕРАЦИЯ "ДЕНЬ РОЖДЕНИЯ" ВЫПОЛНЕНА 😏</div>
-            <div class="scrollable-text">
-                С днём рождения! Этот сайт — твой персональный цифровой трофей 🥳<br><br>
-                Прими самые искренние поздравления! Желаю тебе космического взлета в карьере, крутых проектов и чтобы твоя целеустремленность приводила тебя только к победам.<br><br>
-                Не устану говорить, ты потрясающая, невероятная и та искра, которая между нами проскочила, для меня очень ценна 🫶🏻 Я искренне восхищаюсь твоей силой и тем, как ты предана своему делу. Пусть всё задуманное сбывается легко, быстро и масштабно!<br><br>
-                Но прямо сейчас, зная твои нагрузки, я хочу стать для тебя не заботой, о которой нужно дополнительно думать, а местом, где можно тотально расслабиться. Давай двигаться плавно. Мне не нужно, чтобы ты соответствовала какому-то уровню (скажу по секрету-это я пытаюсь соответствовать тебе 🤫).<br><br>
-                Со мной можно быть любой: уставшей, выгоревшей, молчаливой или же отбитой 😅 Моя забота — это безусловный ресурс, её не нужно заслуживать или возвращать встречными шагами. Мне просто достаточно того, что ты есть.<br><br>
-                Отличного тебе праздника и побольше улыбок! А продолжение устроим, когда я вернусь с вахты — если ты сама этого захочешь 😌<br><br>
-                С днём рождения! 🍓🎁
+            
+            <div class="scroll-container-wrapper" id="scrollWrapper">
+                <div class="scrollable-text" id="textBlock" onscroll="trackScroll()">
+                    С днём рождения! Этот сайт — твой персональный цифровой трофей 🥳<br><br>
+                    Прими самые искренние поздравления! Желаю тебе космического взлета в карьере, крутых проектов и чтобы твоя целеустремленность приводила тебя только к победам.<br><br>
+                    Не устану говорить, ты потрясающая, невероятная и та искра, которая между нами проскочила, для меня очень ценна 🫶🏻 Я искренне восхищаюсь твоей силой и тем, как ты предана своему делу. Пусть всё задуманное сбывается легко, быстро и масштабно!<br><br>
+                    Но прямо сейчас, зная твои нагрузки, я хочу стать для тебя не заботой, о которой нужно дополнительно думать, а местом, где можно тотально расслабиться. Давай двигаться плавно. Мне не нужно, чтобы ты соответствовала какому-то уровню (скажу по секрету — это я пытаюсь соответствовать тебе 🤫).<br><br>
+                    Со мной можно быть любой: уставшей, выгоревшей, молчаливой или же отбитой 😅 Моя забота — это безусловный ресурс, её не нужно заслуживать или возвращать встречными шагами. Мне просто достаточно того, что ты есть.<br><br>
+                    Отличного тебе праздника и побольше улыбок! А продолжение устроим, когда я вернусь с вахты — если ты сама этого захочешь 😌<br><br>
+                    С днём рождения! 🍓🎁
+                </div>
             </div>
         </div>
     </div>
@@ -458,6 +488,17 @@
                     requestAnimationFrame(frame);
                 }
             }());
+        }
+
+        function trackScroll() {
+            const el = document.getElementById('textBlock');
+            const wrapper = document.getElementById('scrollWrapper');
+            // Если доскроллили до конца (минус погрешность 5px), убираем градиент затухания
+            if (el.scrollHeight - el.scrollTop <= el.clientHeight + 5) {
+                wrapper.classList.add('at-bottom');
+            } else {
+                wrapper.classList.remove('at-bottom');
+            }
         }
     </script>
 </body>
